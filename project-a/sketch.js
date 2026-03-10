@@ -79,7 +79,7 @@ function keepOnScreen() {
 }
 
 function Background() {
-    background(0)
+    background(12, 16, 30)
     stroke(40, 80, 140, 60)
     noFill()
     for (let y3 = 0; y3 < height; y3 += 25) {
