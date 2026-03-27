@@ -39,129 +39,148 @@ class GavynDancer {
 
     // add properties for your dancer here:
     this.t = 0;
-    this.speed = 0.08;
-    this.sway = 0;
+    this.armAngle = 0;
+    this.elbowAngle = 0;
+    this.legAngle = 0;
+    this.kneeAngle = 0;
     this.bounce = 0;
-    this.bodyTilt = 0;
-    this.headTilt = 0;
+    this.bodyShift = 0;
 
-    this.lUpperArm = 0;
-    this.lLowerArm = 0;
-    this.rUpperArm = 0;
-    this.rLowerArm = 0;
 
-    this.lUpperLeg = 0;
-    this.lLowerLeg = 0;
-    this.rUpperLeg = 0;
-    this.rLowerLeg = 0;
-
-    this.lArmOffset = 0;
-    this.rArmOffset = 0;
-    this.lLegOffset = 0;
-    this.rLegOffset = 0;
-    this.headOffset = 0;
+    this.armMove = 0.8;
+    this.elbowMove = 0.4;
+    this.legMove = 0.4;
+    this.kneeMove = 0.4;
+    this.bounceMove = 8;
+    this.speed = 0.02;
   }
 
   update() {
-    // update properties here to achieve
-    // your dancer's desired moves and behaviour
+
     this.t += this.speed;
 
-    if (frameCount % 25 === 0) {
-      this.lArmOffset = random(-0.5, 0.5);
-      this.rArmOffset = random(-0.5, 0.5);
-      this.lLegOffset = random(-0.35, 0.35);
-      this.rLegOffset = random(-0.35, 0.35);
-      this.headOffset = random(-0.2, 0.2);
+    if (frameCount % 60 === 0) {
+      this.armMove = random(0.5, 0.9);
+      this.elbowMove = random(0.3, 0.5);
+      this.legMove = random(0.2, 0.5);
+      this.kneeMove = random(0.2, 0.5);
+      this.bounceMove = random(5, 8);
+      this.speed = random(0.07, 0.11);
     }
 
-    this.sway = sin(this.t * 1.3) * 12;
-    this.bounce = sin(this.t * 2.4) * 10;
-    this.bodyTilt = sin(this.t * 1.7) * 0.15;
-    this.headTilt = sin(this.t * 2.1) * 0.12 + this.headOffset;
-
-    this.lUpperArm = sin(this.t * 2.4) * 0.9 + this.lArmOffset;
-    this.lLowerArm = sin(this.t * 3.1 + 1) * 0.7;
-
-    this.rUpperArm = sin(this.t * 2.8 + PI) * 0.9 + this.rArmOffset;
-    this.rLowerArm = sin(this.t * 3.4 + 2) * 0.7;
-
-    this.lUpperLeg = sin(this.t * 2.2) * 0.5 + this.lLegOffset;
-    this.lLowerLeg = abs(sin(this.t * 2.9)) * 0.6;
-
-    this.rUpperLeg = sin(this.t * 2.2 + PI) * 0.5 + this.rLegOffset;
-    this.rLowerLeg = abs(sin(this.t * 2.9 + 1.3)) * 0.6;
+    this.armAngle = sin(this.t) * this.armMove;
+    this.elbowAngle = sin(this.t * 2) * this.elbowMove;
+    this.legAngle = sin(this.t * 1.3) * this.legMove;
+    this.kneeAngle = abs(sin(this.t * 2.2)) * this.kneeMove;
+    this.bounce = sin(this.t * 2) * this.bounceMove;
+    this.bodyShift = sin(this.t) * 6;
   }
 
   display() {
-    // the push and pop, along with the translate 
-    // places your whole dancer object at this.x and this.y.
-    // you may change its position on line 19 to see the effect.
     push();
-    translate(this.x + this.sway, this.y + this.bounce);
+    translate(this.x + this.bodyShift, this.y + this.bounce);
 
     // ******** //
     // ⬇️ draw your dancer from here ⬇️
 
     rectMode(CENTER);
 
-    push();
-    rotate(this.bodyTilt);
-
-    // legs
-    this.drawLeg(-12, 28, this.lUpperLeg, this.lLowerLeg);
-    this.drawLeg(12, 28, this.rUpperLeg, this.rLowerLeg);
-
     // body
     noStroke();
-    fill(30, 110, 210);
-    rect(0, 0, 52, 68, 10);
+    fill(34, 139, 34);
+    rect(0, 0, 40, 60, 10);
 
     // shirt
-    fill(245);
-    rect(0, 4, 20, 46, 4);
+    fill(34, 139, 34);
+    rect(0, 5, 16, 35, 4);
 
-    // necklace
-    fill(230, 190, 60);
-    ellipse(0, -20, 10, 10);
+    // left arm
+    push();
+    translate(-20, -20);
+    stroke(210, 180, 140);
+    strokeWeight(8);
+    rotate(this.armAngle);
+    line(0, 0, 0, 25);
 
-    // arms
-    this.drawArm(-24, -18, this.lUpperArm, this.lLowerArm);
-    this.drawArm(24, -18, this.rUpperArm, this.rLowerArm);
+    translate(0, 25);
+    rotate(this.elbowAngle);
+    line(0, 0, 0, 20);
+    pop();
 
+    // right arm
+    push();
+    translate(20, -20);
+    stroke(210, 180, 140);
+    strokeWeight(8);
+    rotate(-this.armAngle);
+    line(0, 0, 0, 25);
+
+    translate(0, 25);
+    rotate(-this.elbowAngle);
+    line(0, 0, 0, 20);
+    pop();
+
+    // left leg
+    push();
+    translate(-10, 30);
+    stroke(30);
+    strokeWeight(8);
+    rotate(this.legAngle);
+    line(0, 0, 0, 25);
+
+    translate(0, 25);
+    rotate(this.kneeAngle);
+    line(0, 0, 0, 20);
+
+    // left shoe
+    noStroke();
+    fill(255);
+    ellipse(4, 22, 16, 8);
+    pop();
+
+    // right leg
+    push();
+    translate(10, 30);
+    stroke(30);
+    strokeWeight(8);
+    rotate(-this.legAngle);
+    line(0, 0, 0, 25);
+
+    translate(0, 25);
+    rotate(this.kneeAngle);
+    line(0, 0, 0, 20);
+
+    // right shoe
+    noStroke();
+    fill(255);
+    ellipse(4, 22, 16, 8);
     pop();
 
     // head
     push();
-    translate(0, -56);
-    rotate(this.headTilt);
-
-    // brown hair
-    noStroke();
-    fill(95, 55, 25);
-    ellipse(0, -6, 54, 42);
+    translate(0, -50);
 
     // face
-    fill(255, 220, 180);
-    ellipse(0, 0, 48, 50);
+    noStroke();
+    fill(210, 180, 140);
+    ellipse(0, 0, 40, 40);
 
-    // bangs
+    // hair
     fill(95, 55, 25);
-    arc(0, -12, 48, 28, PI, TWO_PI);
-    ellipse(-11, -8, 14, 16);
-    ellipse(0, -11, 16, 18);
-    ellipse(11, -8, 14, 16);
+    arc(0, -6, 42, 28, PI, TWO_PI);
+    ellipse(-18, -5, 8, 18);
+    ellipse(18, -5, 8, 18);
 
     // eyes
     fill(0);
-    ellipse(-9, -3, 5, 7);
-    ellipse(9, -3, 5, 7);
+    ellipse(-7, -2, 4, 4);
+    ellipse(7, -2, 4, 4);
 
     // mouth
     noFill();
     stroke(0);
     strokeWeight(2);
-    arc(0, 8, 16, 10, 0, PI);
+    arc(0, 6, 12, 8, 0, PI);
 
     pop();
 
@@ -178,49 +197,6 @@ class GavynDancer {
 
     pop();
   }
-
-  drawArm(x, y, upperAngle, lowerAngle) {
-    push();
-    translate(x, y);
-    stroke(30, 110, 210);
-    strokeWeight(10);
-    strokeCap(ROUND);
-
-    rotate(upperAngle);
-    line(0, 0, 0, 28);
-
-    translate(0, 28);
-    rotate(lowerAngle);
-    line(0, 0, 0, 24);
-
-    noStroke();
-    fill(255, 220, 180);
-    ellipse(0, 24, 10, 10);
-
-    pop();
-  }
-
-  drawLeg(x, y, upperAngle, lowerAngle) {
-    push();
-    translate(x, y);
-    stroke(25);
-    strokeWeight(11);
-    strokeCap(ROUND);
-
-    rotate(upperAngle);
-    line(0, 0, 0, 28);
-
-    translate(0, 28);
-    rotate(lowerAngle);
-    line(0, 0, 0, 26);
-
-    noStroke();
-    fill(255);
-    ellipse(0, 28, 16, 8);
-
-    pop();
-  }
-
   drawReferenceShapes() {
     noFill();
     stroke(255, 0, 0);
