@@ -45,8 +45,6 @@ class GavynDancer {
     this.kneeAngle = 0;
     this.bounce = 0;
     this.bodyShift = 0;
-
-
     this.armMove = 0.8;
     this.elbowMove = 0.4;
     this.legMove = 0.4;
