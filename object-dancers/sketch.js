@@ -32,47 +32,117 @@ function draw() {
 
 // You only code inside this class.
 // Start by giving the dancer your name, e.g. LeonDancer.
-class YourNameDancer {
+class GavynDancer {
   constructor(startX, startY) {
     this.x = startX;
     this.y = startY;
-    // add properties for your dancer here:
-    //..
-    //..
-    //..
+
+    this.t = 0;
+    this.speed = 0.08;
+
+    this.bounce = 0;
+    this.sway = 0;
+    this.armSwing = 0;
+    this.legSwing = 0;
+    this.headTilt = 0;
+    this.eyeHeight = 6;
   }
+
   update() {
-    // update properties here to achieve
-    // your dancer's desired moves and behaviour
+    this.t += this.speed;
+
+    this.bounce = sin(this.t * 2) * 10;
+    this.sway = sin(this.t) * 15;
+    this.armSwing = sin(this.t * 3) * 0.7;
+    this.legSwing = sin(this.t * 3 + PI) * 0.5;
+    this.headTilt = sin(this.t * 2) * 0.15;
+
+    if (sin(this.t * 4) > 0.93) {
+      this.eyeHeight = 1;
+    } else {
+      this.eyeHeight = 6;
+    }
   }
+
   display() {
-    // the push and pop, along with the translate 
-    // places your whole dancer object at this.x and this.y.
-    // you may change its position on line 19 to see the effect.
     push();
-    translate(this.x, this.y);
+    translate(this.x + this.sway, this.y + this.bounce);
 
     // ******** //
     // ⬇️ draw your dancer from here ⬇️
 
+    stroke(255);
+    strokeWeight(4);
 
+    // legs
+    push();
+    translate(0, 25);
 
+    push();
+    rotate(this.legSwing);
+    line(-12, 20, -20, 65);
+    pop();
 
+    push();
+    rotate(-this.legSwing);
+    line(12, 20, 20, 65);
+    pop();
 
+    pop();
+
+    // body
+    noStroke();
+    fill(80, 170, 255);
+    rectMode(CENTER);
+    rect(0, 0, 45, 70, 12);
+
+    // arms
+    stroke(255);
+    strokeWeight(4);
+
+    push();
+    translate(-23, -10);
+    rotate(this.armSwing);
+    line(0, 0, -28, 25);
+    pop();
+
+    push();
+    translate(23, -10);
+    rotate(-this.armSwing);
+    line(0, 0, 28, 25);
+    pop();
+
+    // head
+    push();
+    translate(0, -55);
+    rotate(this.headTilt);
+
+    noStroke();
+    fill(255, 220, 180);
+    ellipse(0, 0, 50, 50);
+
+    // eyes
+    fill(0);
+    ellipse(-10, -5, 6, this.eyeHeight);
+    ellipse(10, -5, 6, this.eyeHeight);
+
+    // smile
+    noFill();
+    stroke(0);
+    strokeWeight(2);
+    arc(0, 5, 18, 12, 0, PI);
+
+    pop();
 
     // ⬆️ draw your dancer above ⬆️
     // ******** //
 
-    // the next function draws a SQUARE and CROSS
-    // to indicate the approximate size and the center point
-    // of your dancer.
-    // it is using "this" because this function, too, 
-    // is a part if your Dancer object.
-    // comment it out or delete it eventually.
-    this.drawReferenceShapes()
+    // comment this out when you don't want the guide anymore
+    // this.drawReferenceShapes();
 
     pop();
   }
+
   drawReferenceShapes() {
     noFill();
     stroke(255, 0, 0);
